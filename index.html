@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway - KentyStoore</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff416c;
+            --text-color: #333;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 1.5s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 0;
+            color: white;
+            animation: fadeInDown 1s ease;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .payment-section, .social-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: fadeInUp 1s ease;
+            transition: transform 0.3s ease;
+        }
+
+        .payment-section:hover, .social-section:hover {
+            transform: translateY(-10px);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-method {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            background: rgba(106, 17, 203, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .payment-method:hover {
+            background: rgba(106, 17, 203, 0.1);
+            transform: scale(1.02);
+        }
+
+        .payment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .payment-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .payment-details {
+            margin-bottom: 15px;
+        }
+
+        .payment-number {
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .payment-owner {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .copy-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .copy-btn:hover {
+            background: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .qris-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .qris-image {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s ease;
+        }
+
+        .qris-image:hover {
+            transform: scale(1.03);
+        }
+
+        .social-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 480px) {
+            .social-links {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .social-card {
+            background: rgba(106, 17, 203, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+
+        .social-card:hover {
+            background: rgba(106, 17, 203, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .social-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .social-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .social-desc {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .color-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            z-index: 100;
+            animation: pulse 2s infinite;
+        }
+
+        .color-toggle i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+        }
+
+        .music-info {
+            font-size: 0.9rem;
+        }
+
+        .music-control {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Floating elements */
+        .floating {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            100% {
+                transform: translate(100vw, 100vh) rotate(360deg);
+            }
+        }
+
+        /* Color themes */
+        .theme-1 {
+            --primary-color: #6a11cb;
+            --secondary-color: #2575fc;
+            --accent-color: #ff416c;
+        }
+
+        .theme-2 {
+            --primary-color: #11998e;
+            --secondary-color: #38ef7d;
+            --accent-color: #ff9068;
+        }
+
+        .theme-3 {
+            --primary-color: #fc466b;
+            --secondary-color: #3f5efb;
+            --accent-color: #f9d423;
+        }
+
+        .theme-4 {
+            --primary-color: #8e2de2;
+            --secondary-color: #4a00e0;
+            --accent-color: #f80759;
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating elements for background animation -->
+    <div class="floating" style="top: 10%; left: 5%; animation-delay: 0s;"></div>
+    <div class="floating" style="top: 20%; left: 80%; animation-delay: 2s;"></div>
+    <div class="floating" style="top: 70%; left: 10%; animation-delay: 4s;"></div>
+    <div class="floating" style="top: 60%; left: 70%; animation-delay: 6s;"></div>
+    <div class="floating" style="top: 30%; left: 40%; animation-delay: 8s;"></div>
+
+    <div class="container">
+        <header>
+            <h1>Payment Gateway</h1>
+            <p class="subtitle">Silakan pilih metode pembayaran yang tersedia</p>
+        </header>
+
+        <div class="main-content">
+            <section class="payment-section">
+                <h2 class="section-title"><i class="fas fa-credit-card"></i> Metode Pembayaran</h2>
+                
+                <div class="payment-method">
+                    <div class="payment-header">
+                        <div class="payment-name">DANA</div>
+                        <button class="copy-btn" data-number="083182576621">
+                            <i class="fas fa-copy"></i> Salin
+                        </button>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number">083182576621</div>
+                        <div class="payment-owner">A/N: SURYANITA</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method">
+                    <div class="payment-header">
+                        <div class="payment-name">GOPAY</div>
+                        <button class="copy-btn" data-number="083182576621">
+                            <i class="fas fa-copy"></i> Salin
+                        </button>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number">083182576621</div>
+                        <div class="payment-owner">A/N: SURYANITA</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method">
+                    <div class="payment-header">
+                        <div class="payment-name">OVO</div>
+                    </div>
+                    <div class="payment-details">
+                        <div class="payment-number">TIDAK ADA</div>
+                    </div>
+                </div>
+                
+                <div class="qris-section">
+                    <h3 class="section-title"><i class="fas fa-qrcode"></i> QRIS</h3>
+                    <img src="https://kentaosj.edgeone.app/20250724_194521.jpg" alt="QR Code" class="qris-image">
+                </div>
+            </section>
+
+            <section class="social-section">
+                <h2 class="section-title"><i class="fas fa-users"></i> Grup & Saluran</h2>
+                
+                <div class="social-links">
+                    <a href="https://chat.whatsapp.com/KRqvWlwISA0EhCG2vjfs69" target="_blank" class="social-card">
+                        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="social-name">GRUB BLOXFRUITS</div>
+                        <div class="social-desc">Bergabung dengan komunitas</div>
+                    </a>
+                    
+                    <a href="https://chat.whatsapp.com/ErQLC4dIQtA4jUKbwaIDLg" target="_blank" class="social-card">
+                        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="social-name">GRUB FISCHT IT</div>
+                        <div class="social-desc">Diskusi teknologi</div>
+                    </a>
+                    
+                    <a href="https://chat.whatsapp.com/DwtRdIYUk3GACKBImKBqW5" target="_blank" class="social-card">
+                        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="social-name">GRUB PLANT VS BRAINROT</div>
+                        <div class="social-desc">Komunitas game</div>
+                    </a>
+                    
+                    <a href="https://whatsapp.com/channel/0029VbArPLQ0QeahxgB2if33" target="_blank" class="social-card">
+                        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="social-name">GRUB ALL MAP ROBLOX</div>
+                        <div class="social-desc">Update terbaru</div>
+                    </a>
+                    
+                    <a href="https://whatsapp.com/channel/0029VbArPLQ0QeahxgB2if33" target="_blank" class="social-card">
+                        <div class="social-icon"><i class="fab fa-whatsapp"></i></div>
+                        <div class="social-name">SALURAN</div>
+                        <div class="social-desc">Channel informasi</div>
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Payment Gateway - Suryanita. Semua hak dilindungi.</p>
+        </footer>
+    </div>
+
+    <!-- Color Toggle Button -->
+    <div class="color-toggle" id="colorToggle">
+        <i class="fas fa-palette"></i>
+    </div>
+
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="music-info">Kendis - Ours to Keep</div>
+        <button class="music-control" id="musicToggle">
+            <i class="fas fa-pause"></i>
+        </button>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bgMusic" loop>
+        <source src="https://kentjmbutt.edgeone.app/Kendis%20-%20ours%20to%20keep%20(feat.%20adis)%20(Official%20Lyric%20Video)%20[hv-tflI7pM4].mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+        // Music player functionality
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = musicToggle.querySelector('i');
+        
+        // Auto play music with user interaction
+        document.addEventListener('click', function() {
+            if (bgMusic.paused) {
+                bgMusic.play().catch(e => console.log("Autoplay prevented:", e));
+            }
+        }, { once: true });
+        
+        musicToggle.addEventListener('click', function() {
+            if (bgMusic.paused) {
+                bgMusic.play();
+                musicIcon.className = 'fas fa-pause';
+            } else {
+                bgMusic.pause();
+                musicIcon.className = 'fas fa-play';
+            }
+        });
+
+        // Color theme toggle
+        const colorToggle = document.getElementById('colorToggle');
+        let currentTheme = 1;
+        
+        colorToggle.addEventListener('click', function() {
+            document.body.classList.remove(`theme-${currentTheme}`);
+            currentTheme = currentTheme % 4 + 1;
+            document.body.classList.add(`theme-${currentTheme}`);
+        });
+
+        // Copy to clipboard functionality
+        const copyButtons = document.querySelectorAll('.copy-btn');
+        
+        copyButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const number = this.getAttribute('data-number');
+                
+                // Create a temporary textarea to copy from
+                const textarea = document.createElement('textarea');
+                textarea.value = number;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                
+                // Change button text temporarily
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                }, 2000);
+            });
+        });
+
+        // Add floating elements dynamically
+        function createFloatingElement() {
+            const floating = document.createElement('div');
+            floating.className = 'floating';
+            
+            // Random position and animation delay
+            const top = Math.random() * 100;
+            const left = Math.random() * 100;
+            const delay = Math.random() * 10;
+            
+            floating.style.top = `${top}%`;
+            floating.style.left = `${left}%`;
+            floating.style.animationDelay = `${delay}s`;
+            
+            document.body.appendChild(floating);
+        }
+        
+        // Create more floating elements
+        for (let i = 0; i < 10; i++) {
+            createFloatingElement();
+        }
+    </script>
+</body>
+      </html>
